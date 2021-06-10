@@ -17,28 +17,26 @@ text_to_translate = input("Enter text to translate:")
 language = language_translator.identify(text_to_translate).get_result()
 
 
-def englishtofrench(text_to_translate):
+def englishtofrench():
     '''translate to frensh'''
-    if text_to_translate = "" {
+    if text_to_translate == "" :
         print("Please enter some words.")
-    } elif text_to_translate = None {
-        print "There is nothing to translate."
-    } else {
+    elif text_to_translate is None :
+        print("There is nothing to translate.")
+    else :
         translation = language_translator.translate(
         text= text_to_translate,
         model_id='en-fr').get_result()
         print(json.dumps(translation, indent=2, ensure_ascii=False))
-    }
 
-def englishtogerman(text_to_translate):
+def englishtogerman():
     '''translate to deutch'''
-     if text_to_translate = "" {
+    if text_to_translate == "" :
         print("Please enter some words.")
-    } elif text_to_translate = None {
-        print "There is nothing to translate."
-    } else {
+    elif text_to_translate is None :
+        print("There is nothing to translate.")
+    else :
         translation = language_translator.translate(
         text= text_to_translate,
         model_id='en-de').get_result()
         print(json.dumps(translation, indent=2, ensure_ascii=False))
-    }

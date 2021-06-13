@@ -1,4 +1,5 @@
 import unittest
+
 from translator import englishtofrench, englishtogerman
 
 class TestEnglishToFrench(unittest.TestCase): 
@@ -13,4 +14,5 @@ class TestTestEnglishToGerman(unittest.TestCase):
         self.assertEqual(englishtogerman(""), "Please enter some words.")
         self.assertEqual(englishtogerman(None), "There is nothing to translate.")
 
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()

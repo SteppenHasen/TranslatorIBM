@@ -1,27 +1,27 @@
 '''translator'''
 import json
-from ibm_watson import LanguageTranslatorV3
+from ibm_watson import LanguageTranslatorV3, language_translator_v3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 
-def translate(str, locale_id):
-    return language_translator.translate(
-    text= str,
-    model_id=locale_id).get_result()
+# def translate(str, locale_id):
+#     return language_translator.translate(
+#     text= str,
+#     model_id=locale_id).get_result()
 
-def json_translation_to_str(json):
-    return json['translations'][0]['translation']
+# def json_translation_to_str(json):
+#     return json['translations'][0]['translation']
 
-def translation_lang_id(text_lang, desired_lang):
-    return f'{text_lang}-{desired_lang}' 
+# def translation_lang_id(text_lang, desired_lang):
+#     return f'{text_lang}-{desired_lang}' 
 
-authenticator = IAMAuthenticator('sbhcOFiS81fKkMZkdb_GnEhckGFkpKJC0aBSdl7NmXqF')
-language_translator = LanguageTranslatorV3(
-    version = '2018-05-01',
-    authenticator = authenticator
-)
-URL_WATSON = 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/b4d58194-df13-4160-9a74-ede7fde5dab2'
-language_translator.set_service_url(URL_WATSON)
+# authenticator = IAMAuthenticator('sbhcOFiS81fKkMZkdb_GnEhckGFkpKJC0aBSdl7NmXqF')
+# language_translator = LanguageTranslatorV3(
+#     version = '2018-05-01',
+#     authenticator = authenticator
+# )
+# URL_WATSON = 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/b4d58194-df13-4160-9a74-ede7fde5dab2'
+# language_translator.set_service_url(URL_WATSON)
 # languages = language_translator.list_identifiable_languages().get_result()
 
 # text_to_translate = input("Enter text to translate:")
@@ -34,22 +34,56 @@ language_translator.set_service_url(URL_WATSON)
 #     )
 # )
 
+# def english_to_french(str):
+#     if not str:
+#         translation = "Nothing to translate"
+#     else:
+#         translation = json_translation_to_str(translate(str, translation_lang_id('en', 'fr')))
+#     return translation
 
 
-# config = { watson_url: 'sdf', authenticator: 'sdfssdfs', skdjfkdjf }
-# translator = Translater.configure(config)
+config = { 
+    'watson_url': 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/b4d58194-df13-4160-9a74-ede7fde5dab2',
+    'authenticator': 'sbhcOFiS81fKkMZkdb_GnEhckGFkpKJC0aBSdl7NmXqF',
+    'version': '2018-05-01'
+    }
+
+class MyTranslator:
+    
+    def configure(conf):
+        language_translator = LanguageTranslatorV3(
+        version = conf['version'],
+        authenticator = IAMAuthenticator(conf['authenticator'])
+        )
+        language_translator.set_service_url(conf['watson_url']) 
+        return language_translator 
+
+class TranslationProc:
+    def __init__(self, str) -> None:
+        self.translator = MyTranslator.configure(config)
+        self.str = str
+
+    def define_lang(self):
+        return self.translator.identify(self.str).get_result()['languages'][0]['language']
+
+    def translate(self, locale_id):
+        return self.translator.translate(
+            text = self.str,
+            model_id=locale_id).get_result()
+    
+    def json_translation_to_str(json):
+        return json['translations'][0]['translation']
+
+    def translation_lang_id(text_lang, desired_lang):
+        return f'{text_lang}-{desired_lang}'
+
+    def translate_user_prompt(self):
+        print(
+            json_translation_to_str(
+                translate(self.str, translation_lang_id(self.translator.identify(self.str).get_result()['languages'][0]['language'], 'fr'))
+            )
+        )
+
+abc = TranslationProc("Some shit")
+abc.translate_user_prompt()
 # translator.translate_user_prompt()
-
-def english_to_german(str):
-    if not str:
-        translation = "Nothing to translate"
-    else:
-        translation = json_translation_to_str(translate(str, translation_lang_id('en', 'de')))
-    return translation
-
-def english_to_french(str):
-    if not str:
-        translation = "Nothing to translate"
-    else:
-        translation = json_translation_to_str(translate(str, translation_lang_id('en', 'fr')))
-    return translation

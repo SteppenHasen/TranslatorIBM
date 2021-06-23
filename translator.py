@@ -3,8 +3,16 @@ import json
 from ibm_watson import LanguageTranslatorV3, language_translator_v3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from dotenv import dotenv_values
+import inquirer
 
 config = dotenv_values(".env")
+question = [
+  inquirer.List('lang',
+                message="What language do you need?",
+                choices=['en', 'fr', 'de', 'af', 'uk', 'ja'],
+            ),
+]
+answer = inquirer.prompt(question)
 
 class TranslationProc:
     def __init__(self, str) -> None:
@@ -37,7 +45,7 @@ class TranslationProc:
         if not self.str:
             translation = "Nothing to translate"
         else:
-            translation = json_translation_to_str(translate(translation_lang_id(define_lang(), 'fr')))
+            translation = json_translation_to_str(translate(translation_lang_id(define_lang(), answer['lang'])))
         return translation
 
 TranslationProc.configure(config)

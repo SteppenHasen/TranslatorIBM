@@ -2,12 +2,9 @@
 import json
 from ibm_watson import LanguageTranslatorV3, language_translator_v3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-config = { 
-    'watson_url': 'https://api.us-south.language-translator.watson.cloud.ibm.com/instances/b4d58194-df13-4160-9a74-ede7fde5dab2',
-    'authenticator': 'sbhcOFiS81fKkMZkdb_GnEhckGFkpKJC0aBSdl7NmXqF',
-    'version': '2018-05-01'
-    }
+from dotenv import dotenv_values
 
+config = dotenv_values(".env")
 
 class TranslationProc:
     def __init__(self, str) -> None:
@@ -16,10 +13,10 @@ class TranslationProc:
 
     def configure(conf):
         language_translator = LanguageTranslatorV3(
-        version = conf['version'],
-        authenticator = IAMAuthenticator(conf['authenticator'])
+        version = conf['VERSION'],
+        authenticator = IAMAuthenticator(conf['AUTHENTICATOR'])
         )
-        language_translator.set_service_url(conf['watson_url']) 
+        language_translator.set_service_url(conf['WATSON_URL']) 
         return language_translator 
 
     def translate_user_prompt(self):

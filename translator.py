@@ -63,27 +63,26 @@ class TranslationProc:
         self.translator = MyTranslator.configure(config)
         self.str = str
 
-    def define_lang(self):
-        return self.translator.identify(self.str).get_result()['languages'][0]['language']
-
-    def translate(self, locale_id):
-        return self.translator.translate(
-            text = self.str,
-            model_id=locale_id).get_result()
-    
-    def json_translation_to_str(json):
-        return json['translations'][0]['translation']
-
-    def translation_lang_id(text_lang, desired_lang):
-        return f'{text_lang}-{desired_lang}'
-
     def translate_user_prompt(self):
-        print(
-            json_translation_to_str(
-                translate(self.str, translation_lang_id(self.translator.identify(self.str).get_result()['languages'][0]['language'], 'fr'))
-            )
-        )
+        def define_lang():
+            return self.translator.identify(self.str).get_result()['languages'][0]['language']
 
-abc = TranslationProc("Some shit")
-abc.translate_user_prompt()
-# translator.translate_user_prompt()
+        def translate(locale_id):
+            return self.translator.translate(
+                text = self.str,
+                model_id=locale_id).get_result()
+        
+        def json_translation_to_str(json):
+            return json['translations'][0]['translation']
+
+        def translation_lang_id(text_lang, desired_lang):
+            return f'{text_lang}-{desired_lang}'
+
+        if not self.str:
+            translation = "Nothing to translate"
+        else:
+            translation = json_translation_to_str(translate(translation_lang_id(define_lang(), 'fr')))
+        return translation
+
+abc =TranslationProc("Some shit").translate_user_prompt()
+print(abc)

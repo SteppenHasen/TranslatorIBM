@@ -14,39 +14,42 @@ question = [
 ]
 answer = inquirer.prompt(question)
 
-class TranslationProc:
-    def __init__(self, str) -> None:
-        self.translator = TranslationProc.configure(config)
-        self.str = str
+class Translator:
+    EMPTY_STRING = "Nothing to translate"
 
-    def configure(conf):
-        language_translator = LanguageTranslatorV3(
-        version = conf['VERSION'],
-        authenticator = IAMAuthenticator(conf['AUTHENTICATOR'])
-        )
-        language_translator.set_service_url(conf['WATSON_URL']) 
-        return language_translator 
+    @staticmethod
+    def call(translation_engine, string, lang):
+        return Translator(translation_engine, string, lang).instance_call()
 
-    def translate_user_prompt(self):
-        def define_lang():
-            return self.translator.identify(self.str).get_result()['languages'][0]['language']
+    def __init__(self, translation_engine, string, lang) -> None:
+        self.translation_engine = translation_engine
+        self.string = string
+        self.desired_lang = lang
 
-        def translate(locale_id):
-            return self.translator.translate(
-                text = self.str,
-                model_id=locale_id).get_result()
-        
-        def json_translation_to_str(json):
-            return json['translations'][0]['translation']
+    def instance_call(self):
+        return self.EMPTY_STRING if not self.string else self.__translate__()
 
-        def translation_lang_id(text_lang, desired_lang):
-            return f'{text_lang}-{desired_lang}'
+    def __translate__(self):
+        return self.__json_translation_to_str__(
+                self.__call_translation_api__()
+            )
 
-        if not self.str:
-            translation = "Nothing to translate"
-        else:
-            translation = json_translation_to_str(translate(translation_lang_id(define_lang(), answer['lang'])))
-        return translation
+    def __json_translation_to_str__(self, json):
+        return json['translations'][0]['translation']
 
-TranslationProc.configure(config)
-print(TranslationProc("Some awesome code").translate_user_prompt())
+    def __call_translation_api__(self):
+        return self.translation_engine.translate(text = self.string, model_id = self.__lang_id()).get_result()
+
+    def __base_lang__(self):
+        return self.translation_engine.identify(self.string).get_result()['languages'][0]['language']
+
+    def __lang_id(self):
+        return f'{self.__base_lang__()}-{self.desired_lang}'
+
+translation_engine = LanguageTranslatorV3(
+    version = config['VERSION'],
+    authenticator = IAMAuthenticator(config['AUTHENTICATOR'])
+)
+translation_engine.set_service_url(config['WATSON_URL'])
+
+print(Translator.call(translation_engine, "Some", answer['lang']))

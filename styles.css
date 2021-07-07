@@ -1,0 +1,87 @@
+body {
+    background-color: #739c3e;
+    color: azure;
+    font-family: 'Caveat', cursive;
+    text-align: center;
+    align-items: center;
+}
+form, input, button {font: inherit; color: azure;}
+::placeholder {color: azure;}
+.container {
+    display: flex;
+}
+
+.language_selection {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    background-color: #aec55d;
+    border-radius: 10px;
+    margin: 5px;
+}
+.language_selection button {
+    background-color: #2f1e0a;
+    border-radius: 10px;
+    border: 0;
+    width: 80%;
+    height: 93%;
+    margin: 10px;
+}
+
+.transletor_area {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+    background-color: #aec55d;
+    border-radius: 10px;
+    border: 0;
+    margin: 5px;
+}
+.content {
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+}
+.content-input, .content {
+    background-color: #7c5e3c;
+    border-radius: 10px;
+    border: 0;
+    margin: 5px;
+}
+
+.text_to_translate {
+    width: 70%;
+    height:fit-content;
+    background-color: #dcd294;
+    border-radius: 5px;
+    border: 0;
+    margin: 15px 15px 0 15px;
+    align-self: flex-end;
+    color: #2f1e0a;
+}
+.translated_text {
+    width: 70%;
+    height:fit-content;
+    background-color: #e9f0c0;
+    border-radius: 5px;
+    border: 0;
+    margin: 15px 15px 0 15px;
+    align-self: flex-start;
+    color: #2f1e0a;
+}
+
+.input_to_translate {
+    background-color: #2f1e0a;
+    border-radius: 10px;
+    border: 0;
+    margin: 5px;
+    width: 75%;
+}
+.input_to_submit {
+    background-color: #2f1e0a;
+    border-radius: 10px;
+    border: 0;
+    margin: 5px;
+    width: 15%;
+}

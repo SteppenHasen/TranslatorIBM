@@ -29,19 +29,21 @@
 
             <div class="content-input">
                 <form method="POST" id="input_form">
+                    {% csrf_token %}
                     <input type="text" id="input_area" class="input_to_translate" placeholder="Write what you want">
                     <input type="submit" class="input_to_submit" value="OK">
                 </form>
             </div>
         </div>
 
-        <div class="language_selection">
-            <button id="en" type="button">English</button>
-            <button id="fr" type="button">French</button>
-            <button id="de" type="button">German</button>
-            <button id="af" type="button">Afrikaans</button>
-            <button id="uk" type="button">Ukrainian</button>
-            <button id="ja" type="button">Japan</button>
+        <div class="language_selection" method="POST">
+            <label>Select language: </label>
+            <button value="en" type="submit">English</button>
+            <button value="fr" type="submit">French</button>
+            <button value="de" type="submit">German</button>
+            <button value="af" type="submit">Afrikaans</button>
+            <button value="uk" type="submit">Ukrainian</button>
+            <button value="ja" type="submit">Japan</button>
         </div>
     </div>
 
